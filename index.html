@@ -1,101 +1,143 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Undangan Pernikahan</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Undangan Pernikahan</title>
 
-  <style>
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      text-align: center;
-      background: #fff7f5;
-      color: #333;
-    }
+<style>
+body{
+margin:0;
+font-family: 'Arial';
+background:#0f172a;
+color:white;
+overflow-x:hidden;
+}
 
-    .container {
-      padding: 40px 20px;
-    }
+.overlay{
+position:fixed;
+inset:0;
+background:linear-gradient(135deg,#1e293b,#0f172a);
+display:flex;
+align-items:center;
+justify-content:center;
+flex-direction:column;
+z-index:999;
+}
 
-    h1 {
-      font-size: 28px;
-    }
+.overlay button{
+padding:12px 20px;
+border:none;
+border-radius:30px;
+background:#f59e0b;
+color:black;
+font-weight:bold;
+margin-top:15px;
+cursor:pointer;
+}
 
-    .nama {
-      font-size: 22px;
-      margin-top: 10px;
-      font-weight: bold;
-    }
+section{
+padding:60px 20px;
+text-align:center;
+}
 
-    .box {
-      margin-top: 20px;
-      padding: 20px;
-      background: white;
-      border-radius: 10px;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-      display: inline-block;
-    }
+.card{
+background:rgba(255,255,255,0.05);
+padding:20px;
+border-radius:15px;
+margin:15px auto;
+max-width:500px;
+backdrop-filter:blur(10px);
+}
 
-    .countdown {
-      font-size: 18px;
-      margin-top: 15px;
-    }
+h1,h2,h3{margin:10px 0}
 
-    iframe {
-      margin-top: 15px;
-      border-radius: 10px;
-    }
-  </style>
+.highlight{
+color:#f59e0b;
+font-weight:bold;
+}
+
+.countdown{
+font-size:20px;
+margin-top:10px;
+color:#38bdf8;
+}
+
+.btn{
+padding:10px 15px;
+border-radius:20px;
+border:none;
+background:#38bdf8;
+color:black;
+font-weight:bold;
+margin-top:10px;
+cursor:pointer;
+}
+</style>
 </head>
 
 <body>
 
-<div class="container">
-
-  <h1>Undangan Pernikahan</h1>
-
-  <div class="box">
-    <div>Kepada Yth.</div>
-    <div class="nama" id="nama-tamu">Tamu Undangan</div>
-  </div>
-
-  <div class="box">
-    <h3>Sodik & Helmalia Rahmawati</h3>
-    <p>Akad Nikah</p>
-    <p>1 Juni 2026 | 11.00 WIB</p>
-
-    <div class="countdown" id="countdown"></div>
-  </div>
-
-  <div class="box">
-    <h3>Lokasi Acara</h3>
-    <p>Kediaman Mempelai Wanita</p>
-
-    <!-- GANTI LINK MAPS DI SINI -->
-    <iframe src="" width="100%" height="250"></iframe>
-  </div>
-
+<!-- OPENING -->
+<div class="overlay" id="overlay">
+<h2>Undangan Pernikahan</h2>
+<p>Klik untuk membuka</p>
+<button onclick="buka()">Buka Undangan</button>
 </div>
 
-<script>
-/* ===== NAMA TAMU ===== */
-const params = new URLSearchParams(window.location.search);
-const nama = params.get("to");
-document.getElementById("nama-tamu").innerText = nama || "Tamu Undangan";
+<!-- CONTENT -->
+<section>
+<h2>THE WEDDING OF</h2>
+<h1 class="highlight">Sodik & Helmalia</h1>
 
-/* ===== COUNTDOWN ===== */
+<div class="card">
+<p>Kepada Yth.</p>
+<h3 id="nama">Tamu Undangan</h3>
+</div>
+
+<div class="card">
+<h3>Akad Nikah</h3>
+<p>1 Juni 2026 • 11.00 WIB</p>
+<div class="countdown" id="countdown"></div>
+</div>
+
+<div class="card">
+<h3>Lokasi</h3>
+<p>Kediaman Mempelai Wanita</p>
+<button class="btn">Buka Maps</button>
+</div>
+</section>
+
+<!-- MUSIC (optional) -->
+<audio id="music" loop>
+<source src="" type="audio/mpeg">
+</audio>
+
+<script>
+// OPEN
+function buka(){
+document.getElementById("overlay").style.display="none";
+document.getElementById("music").play();
+}
+
+// NAMA TAMU
+const url = new URLSearchParams(window.location.search);
+const nama = url.get("to");
+document.getElementById("nama").innerText = nama || "Tamu Undangan";
+
+// COUNTDOWN
 const target = new Date("June 1, 2026 11:00:00").getTime();
 
-setInterval(function () {
-  const now = new Date().getTime();
-  const distance = target - now;
+setInterval(()=>{
+const now = new Date().getTime();
+const dist = target - now;
 
-  const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+const days = Math.floor(dist/(1000*60*60*24));
+const hours = Math.floor((dist%(1000*60*60*24))/(1000*60*60));
 
-  document.getElementById("countdown").innerHTML =
-    days > 0 ? days + " hari lagi" : "Acara sudah dimulai";
-}, 1000);
+document.getElementById("countdown").innerText =
+days+" hari "+hours+" jam lagi";
+},1000);
 </script>
 
 </body>
